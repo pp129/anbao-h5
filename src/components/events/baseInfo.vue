@@ -1,16 +1,16 @@
 <template>
     <div class="main">
-      <div id="map"></div>
+      <div id="map" style="width: 100%;height: 300px;"></div>
     </div>
 </template>
 
 <script>
 export default {
   name: 'baseInfo',
-  data(){
+  data () {
     return {
       map: null,
-      mapOpt: {  // 地图参数配置
+      mapOpt: { // 地图参数配置
         zoom: 12, // 放大倍数
         center: [118.183209, 24.489003],
         mapName: 'tiandi',
@@ -19,11 +19,11 @@ export default {
       }
     }
   },
-  mounted() {
+  mounted () {
     this.initMap()
   },
   methods: {
-    initMap() {
+    initMap () {
       this.map = new WMap.Map('map', {
         zoom: this.mapOpt.zoom,
         center: this.mapOpt.center,

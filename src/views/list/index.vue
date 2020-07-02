@@ -33,7 +33,7 @@
             <van-card
               class="goods-card"
               desc="描述信息"
-              title="商品标题"
+              title="活动名称"
             >
               <template #desc>
                 <div>
