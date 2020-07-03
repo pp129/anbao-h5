@@ -1,6 +1,6 @@
 <template>
     <div class="main">
-      <van-nav-bar title="活动列表" fixed left-arrow @click-left="onClickLeft">
+      <van-nav-bar title="活动列表" left-arrow @click-left="onClickLeft">
       </van-nav-bar>
       <div class="content">
         <van-tabs>
@@ -10,8 +10,7 @@
         </van-tabs>
       </div>
       <div class="footer">
-        <van-divider />
-        <van-button type="info">提交</van-button>
+        <van-button style="margin: 16px;" type="primary" block>提交</van-button>
       </div>
     </div>
 </template>
@@ -67,15 +66,19 @@ export default {
   width: 100%;
 }
 .content{
-  height: calc(~'100% - 110px');
-  margin-top: 46px;
+  height: calc(~'100% - 106px');
+  /*margin-top: 46px;*/
   overflow-y: scroll;
 }
 .footer{
   position: fixed;
   bottom: 0;
   left: 0;
-  height: 90px;
+  height: 60px;
   width: 100%;
+  border-top: 1px solid #ccc;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
 }
 </style>
