@@ -80,5 +80,6 @@ export default {
   display: flex;
   align-items: center;
   box-sizing: border-box;
+  background: #ffffff;
 }
 </style>

@@ -5,9 +5,9 @@
           <span class="draw-icon"></span>
         </div>
         <div class="tools" v-if="showTools">
-          <span class="draw-point" @click="drawPoint"></span>
-          <span class="draw-line"></span>
-          <span class="draw-polygon"></span>
+          <span class="draw-point" @click="drawFn('01')"></span>
+          <span class="draw-line" @click="drawFn('02')"></span>
+          <span class="draw-polygon" @click="drawFn('03')"></span>
         </div>
       </div>
       <van-form @submit="onSubmit">
@@ -162,7 +162,9 @@ export default {
         endTime: '',
         location: '',
         applyName: '',
-        desc: ''
+        desc: '',
+        pointType: '',
+        pointList: []
       },
       types: [
         {
@@ -220,9 +222,47 @@ export default {
     },
     onSubmit (values) {
       console.log('submit', values)
+      console.log(this.forms)
     },
     drawPoint () {
 
+    },
+    drawFn (value) {
+      // this.frameSelectionFlag = false
+      this.forms.pointType = value
+      let type = ''
+      if (this.forms.pointType === '01') {
+        type = 'point'
+      } else if (this.forms.pointType === '02') {
+        type = 'polyline'
+      } else if (this.forms.pointType === '03') {
+        type = 'polygon'
+      } else {
+        return
+      }
+      const config = {
+        fillColor: 'rgba(221, 79, 95, 0.8)', // rgba(142, 203, 247, 0.8)
+        strokeWeight: 2,
+        strokeColor: 'red', // #8ECBF7\#009dfd
+        pointColor: 'red',
+        pointSize: 5,
+        pointIcon: require('@/assets/map_images/pointIcon.png'),
+        textColor: 'green',
+        showGraphic: true
+      }
+      WMap.Draw(this.map, type, config, (e) => {
+        if (type === 'point') {
+          this.forms.pointList = [e.coordinates]
+        } else if (type === 'polyline') {
+          this.forms.pointList = e.coordinates
+        } else if (type === 'circle' || type === 'polygon' || type === 'square' || type === 'rectangle') {
+          // let feature = e.target
+          this.forms.pointList = e.coordinates
+        }
+        // this.frameSelectionFlag = true
+        // 画完清除绘图对象
+        WMap.Clear(this.map)
+      })
     }
   }
 }
