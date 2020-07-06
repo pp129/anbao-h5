@@ -121,7 +121,7 @@
         />
         <div style="margin: 16px;">
           <van-button round block type="info" native-type="submit" style="margin-bottom: 10px;">
-            提交
+            保存
           </van-button>
 <!--          <van-button round block type="default" native-type="button">-->
 <!--            取消-->

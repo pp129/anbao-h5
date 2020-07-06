@@ -20,7 +20,7 @@
         <van-empty
           v-if="list.length<=0"
           class="custom-image"
-          image="https://img.yzcdn.cn/vant/custom-empty-image.png"
+          :image="emptyImg"
           description=""
         />
         <van-list
@@ -31,7 +31,7 @@
         >
           <van-swipe-cell v-for="item in list" :key="item" :title="item">
             <van-card
-              class="goods-card"
+              class="list-item"
               desc="描述信息"
               title="活动名称"
             >
@@ -63,6 +63,7 @@ export default {
   name: 'list',
   data () {
     return {
+      emptyImg: require('@/assets/custom-empty-image.png'),
       value: '',
       list: [],
       loading: false,
@@ -102,11 +103,6 @@ export default {
 </script>
 
 <style scoped lang="less">
-  .goods-card {
-    margin: 0;
-    background-color: #ffffff;
-  }
-
   .swipe-cell-button {
     height: 100%;
   }
