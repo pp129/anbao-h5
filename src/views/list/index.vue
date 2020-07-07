@@ -2,7 +2,7 @@
     <div>
       <van-nav-bar title="活动列表" fixed  @click-right="onClickRight">
         <template #right>
-          <van-icon name="plus" size="20" />
+          <van-icon name="plus" size="20" @click="edit" />
         </template>
       </van-nav-bar>
       <div style="margin-top: 50px;">
@@ -49,7 +49,7 @@
             </van-card>
             <template #right>
               <van-button class="swipe-cell-button" square type="primary" text="编辑" @click="edit"/>
-              <van-button class="swipe-cell-button" square type="danger" text="删除" />
+              <van-button class="swipe-cell-button" square type="danger" text="删除" @click="del" />
             </template>
           </van-swipe-cell>
         </van-list>
@@ -59,6 +59,7 @@
 
 <script>
 import Toast from 'vant/lib/toast'
+import { Dialog } from 'vant'
 export default {
   name: 'list',
   data () {
@@ -97,6 +98,18 @@ export default {
     onClickRight () {},
     edit () {
       this.$router.push({ name: 'events' })
+    },
+    del () {
+      Dialog.confirm({
+        title: '确认删除',
+        message: '是否确认删除此活动'
+      })
+        .then(() => {
+          // on confirm
+        })
+        .catch(() => {
+          // on cancel
+        })
     }
   }
 }

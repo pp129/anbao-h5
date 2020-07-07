@@ -5,10 +5,13 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import '@/style/common.less'
+import disableScale from '@/util/disableScale'
 
 Vue.config.productionTip = false
 
 Vue.use(Vant)
+
+disableScale()// IOS10+ 阻止放大
 
 new Vue({
   router,

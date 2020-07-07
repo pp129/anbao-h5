@@ -21,6 +21,26 @@ const routes = [
     path: '/events',
     name: 'events',
     component: () => import('@/views/events')
+  },
+  {
+    path: '/scheduleEdit',
+    name: 'scheduleEdit',
+    component: () => import('@/views/forms/scheduleEdit')
+  },
+  {
+    path: '/memberEdit',
+    name: 'memberEdit',
+    component: () => import('@/views/forms/memberEdit')
+  },
+  {
+    path: '/securityEdit',
+    name: 'securityEdit',
+    component: () => import('@/views/forms/securityEdit')
+  },
+  {
+    path: '/carsEdit',
+    name: 'carsEdit',
+    component: () => import('@/views/forms/carsEdit')
   }
 ]
 

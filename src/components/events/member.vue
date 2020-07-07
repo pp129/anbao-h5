@@ -1,69 +1,55 @@
 <template>
     <div>
-      <div v-if="!showEdit">
-        <van-search
-          v-model="query"
-          show-action
-          shape="round"
-          placeholder="姓名/证件号码"
-          @cancel="onCancel"
-        >
-          <template #action>
-            <div @click="onSearch">搜索</div>
-          </template>
-        </van-search>
-        <van-row>
-          <van-col span="12">
-            <van-button plain hairline type="primary" block>新增</van-button>
-          </van-col>
-          <van-col span="12">
-            <van-button plain hairline type="info" block>导入</van-button>
-          </van-col>
-        </van-row>
-        <van-empty
-          v-if="list.length <= 0"
-          class="custom-image"
-          :image="emptyImg"
-          description=""
-        />
-        <van-list
-          v-model="loading"
-          :finished="finished"
-          finished-text="没有更多了"
-          @load="onLoad"
-        >
-          <van-swipe-cell v-for="(item,index) in list" :key="index" :title="item.idcard">
-            <van-card
-              class="list-item"
-              desc="描述信息"
-              :title="item.name+' '+item.idcard"
-            >
-              <template #desc>
-                <van-row>
-                  <van-col span="12">{{item.type}}</van-col>
-                  <van-col span="12">{{item.cardNo}}</van-col>
-                </van-row>
-              </template>
-            </van-card>
-            <template #right>
-              <van-button class="swipe-cell-button" square type="primary" text="编辑" @click="edit"/>
-              <van-button class="swipe-cell-button" square type="danger" text="删除" />
+      <van-search
+        v-model="query"
+        show-action
+        shape="round"
+        placeholder="姓名/证件号码"
+        @cancel="onCancel"
+      >
+        <template #action>
+          <div @click="onSearch">搜索</div>
+        </template>
+      </van-search>
+      <van-empty
+        v-if="list.length <= 0"
+        class="custom-image"
+        :image="emptyImg"
+        description=""
+      />
+      <van-list
+        v-model="loading"
+        :finished="finished"
+        finished-text="没有更多了"
+        @load="onLoad"
+      >
+        <van-swipe-cell v-for="(item,index) in list" :key="index" :title="item.idcard">
+          <van-card
+            class="list-item"
+            desc="描述信息"
+            :title="item.name+' '+item.idcard"
+          >
+            <template #desc>
+              <van-row>
+                <van-col span="12">{{item.type}}</van-col>
+                <van-col span="12">{{item.cardNo}}</van-col>
+              </van-row>
             </template>
-          </van-swipe-cell>
-        </van-list>
-      </div>
-      <member-edit v-if="showEdit" @cancelEdit="cancelEdit"></member-edit>
+          </van-card>
+          <template #right>
+            <van-button class="swipe-cell-button" square type="primary" text="编辑" @click="edit"/>
+            <van-button class="swipe-cell-button" square type="danger" text="删除" @click="del" />
+          </template>
+        </van-swipe-cell>
+      </van-list>
     </div>
 </template>
 
 <script>
 import Toast from 'vant/lib/toast'
-import memberEdit from '@/components/events/memberEdit'
+import { Dialog } from 'vant'
 export default {
   name: 'member',
-  components: {
-    memberEdit: memberEdit
-  },
   data () {
     return {
       query: '',
@@ -77,8 +63,7 @@ export default {
         }
       ],
       loading: false,
-      finished: false,
-      showEdit: false
+      finished: false
     }
   },
   methods: {
@@ -106,10 +91,21 @@ export default {
       }, 1000)
     },
     edit () {
-      this.showEdit = true
+      this.$router.push({ name: 'memberEdit' })
     },
-    cancelEdit () {
-      this.showEdit = false
+    imports () {},
+    download () {},
+    del () {
+      Dialog.confirm({
+        title: '确认删除',
+        message: '是否确认删除此人员'
+      })
+        .then(() => {
+          // on confirm
+        })
+        .catch(() => {
+          // on cancel
+        })
     }
   }
 }

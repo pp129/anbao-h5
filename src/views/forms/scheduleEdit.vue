@@ -1,6 +1,6 @@
 <template>
-<div>
-  <van-form @submit="onSubmit">
+<div class="main_form">
+  <van-form class="content" @submit="onSubmit">
     <van-field
       readonly
       clickable
@@ -132,11 +132,11 @@
       </template>
     </van-field>
   </van-form>
-  <div style="margin: 16px;">
-    <van-button round block type="info" native-type="submit" style="margin-bottom: 10px;">
+  <div class="footer">
+    <van-button block type="info" native-type="submit">
       保存
     </van-button>
-    <van-button round block type="default" native-type="button" @click="onCancel">
+    <van-button block type="default" native-type="button" @click="onCancel">
       取消
     </van-button>
   </div>
@@ -164,7 +164,7 @@ export default {
       console.log(this.forms)
     },
     onCancel () {
-      this.$emit('cancelEdit')
+      this.$router.back()
     },
     onConfirm (date) {
       const [start, end] = date

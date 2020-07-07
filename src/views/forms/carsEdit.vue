@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <van-form @submit="onSubmit">
+  <div class="main_form">
+    <van-form class="content" @submit="onSubmit">
       <van-field
         v-model="forms.carNo"
         name="carNo"
@@ -118,20 +118,22 @@
         @click="pickEndLocation"
       />
       <div id="mapOne" style="width: 100%;height: 300px;position: relative;z-index: 1;"></div>
-      <div style="margin: 16px;">
-        <van-button round block type="info" native-type="submit" style="margin-bottom: 10px;">
-          保存
-        </van-button>
-        <van-button round block type="default" native-type="button" @click="onCancel">
-          取消
-        </van-button>
-      </div>
     </van-form>
+    <div class="footer">
+      <van-button block type="info" native-type="submit">
+        保存
+      </van-button>
+      <van-button block type="default" native-type="button" @click="onCancel">
+        取消
+      </van-button>
+    </div>
   </div>
 </template>
 
 <script>
 import moment from 'moment'
+import { getSolve } from '@/api/map'
+
 export default {
   name: 'carsEdit',
   data () {
@@ -163,6 +165,7 @@ export default {
       pointType: '',
       startLayer: null,
       endLayer: null,
+      pathLayer: null,
       startTarget: null,
       endTarget: null,
       targetPoint: null,
@@ -187,7 +190,7 @@ export default {
       console.log(this.forms)
     },
     onCancel () {
-      this.$emit('cancelEdit')
+      this.$router.back()
     },
     onConfirm (value) {
       this.forms.startTime = moment(value).format('YYYY-MM-DD HH:mm:ss')
@@ -215,7 +218,13 @@ export default {
       this.endLayer.set('id', 'endLayer')
       // 添加图层
       this.map.addLayer(this.endLayer)
-
+      // 创建图层
+      this.pathLayer = new WMap.Layer()
+      // 设置图层id
+      this.pathLayer.set('id', 'pathLayer')
+      // 添加图层
+      this.map.addLayer(this.pathLayer)
+      // 地图单击事件
       this.map.on('click', (e) => {
         console.log(e)
         this.targetPoint = e.coordinate
@@ -232,6 +241,7 @@ export default {
             this.startLayer.addFeature(marker)
             this.forms.startLocation = `${this.targetPoint[0]},${this.targetPoint[1]}`
             this.pointType = ''
+            this.getPaths()
           } else {
             this.endLayer.clear()
             // 创建自定义点标记实例：
@@ -244,11 +254,12 @@ export default {
             this.endLayer.addFeature(marker)
             this.forms.endLocation = `${this.targetPoint[0]},${this.targetPoint[1]}`
             this.pointType = ''
+            this.getPaths()
           }
         }
       })
-
-      this.map.on('dblclick', e => {
+      // 地图双击事件 结束编辑
+      this.map.on('dblclick', () => {
         this.pointType = ''
       })
     },
@@ -257,11 +268,27 @@ export default {
     },
     pickEndLocation () {
       this.pointType = '02'
+    },
+    async getPaths () {
+      let stops = ''
+      if (this.forms.startLocation && this.forms.endLocation) {
+        stops = `${this.forms.startLocation};${this.forms.endLocation}`
+        const data = await getSolve(stops)
+        if (data) {
+          const paths = data.routes.features[0].geometry.paths[0]
+          const polyline = new WMap.Polyline({
+            path: paths,
+            strokeColor: 'blue',
+            strokeWeight: 2
+          })
+          this.pathLayer.clear()
+          this.pathLayer.addFeature(polyline)
+        }
+      }
     }
   }
 }
 </script>
 
 <style scoped>
-
 </style>

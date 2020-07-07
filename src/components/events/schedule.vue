@@ -1,61 +1,53 @@
 <template>
   <div>
-    <div v-if="!showEdit">
-      <van-button type="default" block size="normal" icon="plus" round>新增</van-button>
-      <van-empty
-        v-if="list.length <= 0"
-        class="custom-image"
-        :image="emptyImg"
-        description=""
-      />
-      <van-list
-        v-model="loading"
-        :finished="finished"
-        finished-text="没有更多了"
-        @load="onLoad"
-      >
-        <van-swipe-cell v-for="(item,index) in list" :key="index" :title="item.title">
-          <van-card
-            class="list-item"
-            desc="描述信息"
-            :title="item.title"
-          >
-            <template #desc>
-              <van-row>
-                <van-col span="12">{{item.duty}}</van-col>
-                <van-col span="12">{{item.dutyPhone}}</van-col>
-              </van-row>
-              <van-row>
-                <van-col span="12">{{item.manager}}</van-col>
-                <van-col span="12">{{item.managerPhone}}</van-col>
-              </van-row>
-              <van-row>
-                <van-col span="12">{{item.connect}}</van-col>
-                <van-col span="12">{{item.connectPhone}}</van-col>
-              </van-row>
-            </template>
-          </van-card>
-          <template #right>
-            <van-button class="swipe-cell-button" square type="primary" text="编辑" @click="edit"/>
-            <van-button class="swipe-cell-button" square type="danger" text="删除" />
+    <van-empty
+      v-if="list.length <= 0"
+      class="custom-image"
+      :image="emptyImg"
+      description=""
+    />
+    <van-list
+      v-model="loading"
+      :finished="finished"
+      finished-text="没有更多了"
+      @load="onLoad"
+    >
+      <van-swipe-cell v-for="(item,index) in list" :key="index" :title="item.title">
+        <van-card
+          class="list-item"
+          desc="描述信息"
+          :title="item.title"
+        >
+          <template #desc>
+            <van-row>
+              <van-col span="12">{{item.duty}}</van-col>
+              <van-col span="12">{{item.dutyPhone}}</van-col>
+            </van-row>
+            <van-row>
+              <van-col span="12">{{item.manager}}</van-col>
+              <van-col span="12">{{item.managerPhone}}</van-col>
+            </van-row>
+            <van-row>
+              <van-col span="12">{{item.connect}}</van-col>
+              <van-col span="12">{{item.connectPhone}}</van-col>
+            </van-row>
           </template>
-        </van-swipe-cell>
-      </van-list>
-    </div>
-    <schedule-edit v-if="showEdit" @cancelEdit="cancelEdit"></schedule-edit>
+        </van-card>
+        <template #right>
+          <van-button class="swipe-cell-button" square type="primary" text="编辑" @click="edit"/>
+          <van-button class="swipe-cell-button" square type="danger" text="删除" @click="del" />
+        </template>
+      </van-swipe-cell>
+    </van-list>
   </div>
 </template>
 
 <script>
-import scheduleEdit from '@/components/events/scheduleEdit'
+import { Dialog } from 'vant'
 export default {
   name: 'schedule',
-  components: {
-    scheduleEdit: scheduleEdit
-  },
   data () {
     return {
-      showEdit: false,
       emptyImg: require('@/assets/custom-empty-image.png'),
       list: [{
         title: '活动日程',
@@ -89,10 +81,19 @@ export default {
       }, 1000)
     },
     edit () {
-      this.showEdit = true
+      this.$router.push({ name: 'scheduleEdit' })
     },
-    cancelEdit () {
-      this.showEdit = false
+    del () {
+      Dialog.confirm({
+        title: '确认删除',
+        message: '是否确认删除此日程'
+      })
+        .then(() => {
+          // on confirm
+        })
+        .catch(() => {
+          // on cancel
+        })
     }
   }
 }

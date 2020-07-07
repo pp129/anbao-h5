@@ -15,3 +15,30 @@
   margin: 0;
   background-color: #ffffff;
 }
+.main_form{
+  height: 100%;
+  width: 100%;
+  .content{
+    height: calc(~'100% - 120px');
+    /*margin-top: 46px;*/
+    overflow-y: scroll;
+  }
+  .footer{
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    height: 120px;
+    width: 100%;
+    padding: 0 10px;
+    border-top: 1px solid #ccc;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: space-evenly;
+    box-sizing: border-box;
+    background: #ffffff;
+    z-index: 2;
+    /*margin-top: 10px;*/
+  }
+}
