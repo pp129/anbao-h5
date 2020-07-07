@@ -5,7 +5,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import '@/style/common.less'
-import disableScale from '@/util/disableScale'
+import disableScale from '@utils/disableScale'
 
 Vue.config.productionTip = false
 
