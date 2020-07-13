@@ -10,6 +10,14 @@ const routes = [
     redirect: '/list'
   },
   {
+    path: '/login',
+    name: 'login',
+    component: () => import('@/views/login/index'),
+    meta: {
+      title: 'login'
+    }
+  },
+  {
     path: '/list',
     name: 'list',
     component: () => import('@/views/list/index'),

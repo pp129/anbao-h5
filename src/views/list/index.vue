@@ -1,6 +1,9 @@
 <template>
     <div>
       <van-nav-bar title="活动列表" fixed  @click-right="onClickRight">
+        <template #left>
+          <van-icon :name="logoutUrl" size="20" @click="logout" />
+        </template>
         <template #right>
           <van-icon name="plus" size="20" @click="edit" />
         </template>
@@ -65,6 +68,7 @@ export default {
   data () {
     return {
       emptyImg: require('@/assets/custom-empty-image.png'),
+      logoutUrl: require('@/assets/logout.png'),
       value: '',
       list: [],
       loading: false,
@@ -106,6 +110,19 @@ export default {
       })
         .then(() => {
           // on confirm
+        })
+        .catch(() => {
+          // on cancel
+        })
+    },
+    logout () {
+      Dialog.confirm({
+        title: '退出',
+        message: '是否确认退出系统'
+      })
+        .then(() => {
+          // on confirm、
+          this.$router.push({ name: 'login' })
         })
         .catch(() => {
           // on cancel
