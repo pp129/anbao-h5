@@ -1,22 +1,21 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-
+import app from './modules/app'
+import errorLog from './modules/errorLog'
+import getters from './getters'
+import user from './modules/user'
+import permission from './modules/permission'
+import tagsView from './modules/tagsView'
 Vue.use(Vuex)
 
-export default new Vuex.Store({
-  state: {
-    showRight: false
-  },
-  mutations: {
-    set_show_right: (flag) => {
-      this.state.showRight = flag
-    }
-  },
-  actions: {
-    setShowRight ({ commit }) {
-      commit('set_show_right')
-    }
-  },
+const store = new Vuex.Store({
+  getters,
   modules: {
+    app,
+    errorLog,
+    user,
+    permission,
+    tagsView
   }
 })
+export default store

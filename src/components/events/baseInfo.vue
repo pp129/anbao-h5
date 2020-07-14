@@ -183,7 +183,8 @@ export default {
         venue: false,
         startTime: false,
         endTime: false
-      }
+      },
+      RWHDLX: []
     }
   },
   mounted () {
