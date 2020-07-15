@@ -56,26 +56,17 @@ const user = {
 
   actions: {
     // 登录
-    async Login ({ commit }, user) {
-      const password = 'U8Wa5n6623eDXmrfaXTKgBxLp4vY0rKJ9O0WYsnkCwAvKeGQH1oKt5jPDxnwwslv4rK42wtcodu89iWH HRhWl8fNkKQirtShWobeWvofVfPTc J u9GP8S5bi0n2Y/GEQfu543a6rPzn6TaPUB te1ZLYcBz NFQEahXrHhGSA'
-      return axios.get('/webapp/login/checkAccount', {
-        params: {
-          loginUser: user.username,
-          loginPass: password
-        }
-      })
-        .then(response => {
-          setTimeout(() => {
-            if (response.data.flag) {
-              console.log(response.data.entity.token)
-              setCookie('userToken', `${response.data.entity.token}`, 1)
-              setCookie('userName', `${response.data.entity.name}`, 1)
-              commit('SET_TOKEN', response.data.entity.token)
-              commit('SET_NAME', response.data.entity.name)
-            } else {
-              return Promise.reject(response.data)
-            }
-          }, 1000)
+    Login ({ commit }, user) {
+      return axios.get('/jmxfxt/login/checkAccount?loginUser=' + user.username + '&loginPass=' + user.password)
+        .then((response) => {
+          if (response.data.flag) {
+            setCookie('userToken', `${response.data.entity.token}`, 1)
+            setCookie('userName', `${response.data.entity.name}`, 1)
+            commit('SET_TOKEN', response.data.entity.token)
+            commit('SET_NAME', response.data.entity.name)
+          } else {
+            return Promise.reject(response.data)
+          }
         }
         )
     },
@@ -115,7 +106,7 @@ const user = {
         commit('SET_REDIRECTURL', router.history.pending.path)
       }
       return new Promise((resolve, reject) => {
-        axios.post('/qwksh/login/getPermission?systemName=ptglxt&toredirect=' + store.getters.redirecturl).then((response) => {
+        axios.post('/jmxfxt/login/getPermission?systemName=ptglxt&toredirect=' + store.getters.redirecturl).then((response) => {
           if (response.data.flag) {
             commit('SET_NAME', response.data.entity.USER_NAME)
             var loginuser = getCookie('userName')

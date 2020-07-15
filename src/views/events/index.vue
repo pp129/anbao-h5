@@ -20,8 +20,6 @@
 </template>
 
 <script>
-import { getByCode } from '@/api/getData'
-
 export default {
   name: 'events',
   data () {
@@ -66,22 +64,16 @@ export default {
           title: '涉会车辆',
           component: () => import('@/components/events/cars')
         }
-      ],
-      RWHDLX: []
+      ]
     }
   },
   mounted () {
-    // console.log(this.showActions)
+    console.log(this.$route.params)
     this.setSubMenu(this.active)
-    this.getCode()
   },
   methods: {
-    async getCode () {
-      this.RWHDLX = await getByCode('RWHDLX')
-      console.log(this.RWHDLX)
-    },
     onClickLeft () {
-      this.$router.push({ name: 'list' })
+      this.$router.push({ name: 'home' })
     },
     onClickTab (name, title) {
       this.setSubMenu(name)

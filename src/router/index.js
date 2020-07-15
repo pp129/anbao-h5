@@ -3,11 +3,10 @@ import VueRouter from 'vue-router'
 
 Vue.use(VueRouter)
 
-const routes = [
+export const constantRouterMap = [
   {
     path: '/',
-    name: 'home',
-    redirect: '/list'
+    redirect: '/home'
   },
   {
     path: '/login',
@@ -18,8 +17,8 @@ const routes = [
     }
   },
   {
-    path: '/list',
-    name: 'list',
+    path: '/home',
+    name: 'home',
     component: () => import('@/views/list/index'),
     meta: {
       title: 'list'
@@ -55,7 +54,9 @@ const routes = [
 const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
-  routes
+  routes: constantRouterMap
 })
+
+export const asyncRouterMap = []
 
 export default router

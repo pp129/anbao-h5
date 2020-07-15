@@ -5,6 +5,24 @@
         <van-field v-model="contract" placeholder="公司名称" />
         <p class="sub_title">安全责任人</p>
         <van-field v-model="contractName" label="姓名" placeholder="请输入姓名" />
+        <van-field
+          readonly
+          clickable
+          name="CBDWZJLX"
+          :value="ZJLX"
+          label="证件类型"
+          placeholder="点击选择证件类型"
+          @click="showPicker.ZJLX = true"
+          :rules="[{ required: true, message: '请选择证件类型' }]"
+        />
+        <van-popup v-model="showPicker.ZJLX" position="bottom">
+          <van-picker
+            show-toolbar
+            :columns="CBDWZJLX"
+            @confirm="onConfirmZJLX"
+            @cancel="showPicker.ZJLX = false"
+          />
+        </van-popup>
         <van-field v-model="idcard" label="证件号码" placeholder="请输入证件号码" />
         <van-field v-model="duty" label="职务" placeholder="请输入职务" />
         <van-field v-model="contractPhone" label="联系电话" placeholder="请输入联系电话" />
@@ -28,7 +46,8 @@
       <h2 class="_title">现场临时设施建筑物搭建单位情况</h2>
       <van-cell-group>
         <van-field v-model="contract" placeholder="公司名称" />
-        <van-field
+        <van-field v-model="forms.JZDJQYLX" label="点击选择企业类型" placeholder="请输入点击选择企业类型" />
+       <!-- <van-field
           readonly
           clickable
           name="picker"
@@ -44,7 +63,7 @@
             @confirm="onConfirm"
             @cancel="showPicker = false"
           />
-        </van-popup>
+        </van-popup>-->
         <van-field v-model="registerNo" label="企业注册号" placeholder="请输入企业注册号" />
         <van-field v-model="connectDuty" label="主要负责人" placeholder="请输入主要负责人" />
         <van-field v-model="connectPhone" label="联系电话" placeholder="请输入联系电话" />
@@ -77,11 +96,16 @@
 </template>
 
 <script>
+import { getByCode } from '@/api/getData'
+import _ from 'lodash'
+
 export default {
   name: 'units',
   data () {
     return {
-      showPicker: false,
+      showPicker: {
+        ZJLX: false
+      },
       contract: 'XXX有限公司',
       contractName: '张某',
       idcard: '',
@@ -91,6 +115,8 @@ export default {
       connectDuty: '经理',
       connectPhone: '',
       companyType: '',
+      ZJLX: '',
+      CBDWZJLX: [],
       types: [
         {
           text: 'A型',
@@ -103,13 +129,34 @@ export default {
       ],
       registerNo: '',
       securityNo: '',
-      remark: ''
+      remark: '',
+      forms: {
+        CBDWZJLX: '', // 承办单位安全负责人证件类型
+        JZDJQYLX: ''// 建筑搭建企业类型
+      }
     }
   },
+  mounted () {
+    this.getCode()
+  },
   methods: {
+    async getCode () {
+      const data = await getByCode('ZJLX')
+      _.each(data, e => {
+        this.CBDWZJLX.push({
+          value: e.codeValue,
+          text: e.codeName
+        })
+      })
+    },
     onConfirm (data) {
       this.companyType = data.text
       this.showPicker = false
+    },
+    onConfirmZJLX (value) {
+      this.forms.CBDWZJLX = value.value
+      this.ZJLX = value.text
+      this.showPicker.ZJLX = false
     }
   }
 }

@@ -1,13 +1,14 @@
 module.exports = {
   devServer: {
-    hotOnly: true,
+    host: '172.16.28.49',
+    hotOnly: false,
     open: true,
     proxy: {
-      '/webapp': {
-        target: 'http://172.16.28.190:7088/jmxfxt/',
+      '/jmxfxt': {
+        target: 'http://172.16.28.190:7088/jmxfxt',
         changeOrigin: true,
         pathRewrite: {
-          '^/webapp': '/'
+          '^/jmxfxt': '/'
         }
       },
       '/arcgis': {

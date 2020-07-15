@@ -9,7 +9,9 @@ import disableScale from './utils/disableScale'
 import axios from 'axios'
 import { getToken } from './utils/auth'
 import { setCookie } from '@/utils/cookie'
-
+// import '@/permission' // permission control
+// import { hasPermiss } from './utils/hasPermission'
+// Vue.prototype.hasPerm = hasPermiss
 Vue.config.productionTip = false
 
 Vue.use(Vant)
@@ -19,7 +21,7 @@ disableScale()// IOS10+ 阻止放大
 axios.interceptors.request.use(request => {
   const userToken = getToken()
   if (userToken) {
-    request.headers.UserToken = userToken
+    request.headers.userToken = userToken
   }
   return request
 }, error => {

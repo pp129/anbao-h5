@@ -26,7 +26,7 @@
 </template>
 
 <script>
-// import encrypt from '@/utils/encrypt'
+import encrypt from '@/utils/encrypt'
 // import { checkAccount } from '@/api/getData'
 export default {
   name: 'login',
@@ -39,14 +39,18 @@ export default {
   methods: {
     onSubmit (values) {
       console.log('submit', values)
-      // const password = encrypt(values.password)
+      const password = encrypt(values.password)
+      const userInfo = {
+        username: values.username,
+        password: password
+      }
+      userInfo.password.replace(/\+/g, ' ')
       // console.log(password)
       // const account = await checkAccount()
       // console.log(account)
       // this.$router.push({ name: 'list' })
-      this.$store.dispatch('Login', values).then(() => {
-        console.log(11111)
-        this.$router.push({ name: 'list' })
+      this.$store.dispatch('Login', userInfo).then(() => {
+        this.$router.push({ name: 'home' })
       }).catch(() => {
 
       })
