@@ -136,6 +136,7 @@ import moment from 'moment'
 import { getByCode, getCgxxInfos } from '@/api/getData'
 import _ from 'lodash'
 import axios from 'axios'
+import enableIcon from '@/assets/map_images/enableIcon.png'
 export default {
   name: 'baseInfo',
   data () {
@@ -143,6 +144,7 @@ export default {
       showDraw: true,
       showTools: false,
       map: null,
+      GPSLayer: null,
       mapOpt: { // 地图参数配置
         zoom: 12, // 放大倍数
         center: [118.183209, 24.489003],
@@ -185,12 +187,92 @@ export default {
       RWHDLX: []
     }
   },
+  props: {
+    info: {
+      default: undefined
+    }
+  },
   mounted () {
-    this.getCode()
-    this.getVenue()
+    this.init()
     this.initMap()
   },
   methods: {
+    async init () {
+      await this.getCode()
+      await this.getVenue()
+      await Object.assign(this.forms, this.info)
+      console.log(this.info)
+      const HDLX = _.find(this.RWHDLX, { value: this.info.HDLX })
+      if (HDLX) {
+        this.type = HDLX.text
+      }
+      const HDCG = _.find(this.venues, { value: this.info.HDCG })
+      if (HDCG) {
+        this.venue = HDCG.text
+      }
+      this.showArea()
+    },
+    showArea () {
+      const DTXDS = this.forms.DTXDS
+      if (DTXDS) {
+        const coors = JSON.parse(DTXDS)
+        console.log(coors)
+        if (this.forms.POINTTYPE === 'dian') {
+          this.DrawPoint(coors)
+        } else if (this.forms.POINTTYPE === 'xian') {
+          this.DrawPolyline(coors)
+        } else {
+          this.DrawPolygon(coors)
+        }
+      }
+    },
+    /**
+     * 创建自定义点
+     */
+    DrawPoint (coors) {
+      // 状态图标-默认在线图标
+      const icon = enableIcon
+      const marker = new WMap.Marker({
+        position: coors, // 标注位置
+        icon: icon // 标注图标,默认半径为 5 像素的蓝色圆圈
+      })
+      // 将创建的点标记添加到已创建的矢量图层：
+      this.GPSLayer.addFeature(marker)
+    },
+    /**
+     * 创建自定义折线
+     */
+    DrawPolyline (coors) {
+      const strokeColor = 'rgba(3,156,253,1)' // 线条颜色,默认是blue
+      // 创建自定义折线
+      const polyline = new WMap.Polyline({
+        path: coors, // 折线路径
+        strokeColor: strokeColor, // 线条颜色，默认是blue
+        strokeWeight: 2, // 线条宽度，默认是1，单位是像素
+        strokeDashed: false// 线条类型，true代表虚线；false代表实线，默认false
+      })
+      // 将折线添加到指定的矢量图层：
+      this.GPSLayer.addFeature(polyline)
+    },
+    /**
+     * 创建自定义多边形
+     */
+    DrawPolygon (coors) {
+      const strokeColor = 'rgba(3,156,253,1)' // 线条颜色,默认是blue
+      const fillColor = 'rgba(3,156,253,0.15)'// 填充色颜色,默认是blue
+      // 创建自定义多边形
+      const polygon = new WMap.Polygon({
+        path: coors, // 折线路径
+        strokeColor: strokeColor, // 线条颜色,默认是blue
+        fillColor: fillColor, // 填充色颜色,默认是blue
+        strokeWeight: 2, // 线条宽度,默认是1,单位是像素
+        strokeDashed: true, // 线条类型，true代表虚线；false代表实线
+        // name: '多边形名称' + item.pointCode, // 在多边形中心处显示名称
+        nameColor: 'bule' // 多边形名称的颜色
+      })
+      // 将多边形添加到指定的矢量图层：
+      this.GPSLayer.addFeature(polygon)
+    },
     async getCode () {
       const data = await getByCode('RWHDLX')
       _.each(data, e => {
@@ -219,6 +301,12 @@ export default {
         maxZoom: 18, // 地图放大最大等级
         overview: this.mapOpt.overview // 是否显示小地图
       })
+      // 创建图层
+      this.GPSLayer = new WMap.Layer()
+      // 设置图层 id
+      this.GPSLayer.set('id', 'gpsLayer')
+      // 添加图层
+      this.map.addLayer(this.GPSLayer)
     },
     onConfirmType (value) {
       console.log(value)

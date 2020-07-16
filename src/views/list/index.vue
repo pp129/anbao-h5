@@ -5,7 +5,7 @@
           <van-icon :name="logoutUrl" size="20" @click="logout" />
         </template>
         <template #right>
-          <van-icon name="plus" size="20" @click="edit" />
+          <van-icon name="plus" size="20" @click="add" />
         </template>
       </van-nav-bar>
       <div style="margin-top: 50px;background: #f7f8fa">
@@ -54,7 +54,7 @@
               </template>
             </van-card>
             <template #right>
-              <van-button class="swipe-cell-button" square type="primary" text="编辑" @click="edit(item.HDXXID)"/>
+              <van-button class="swipe-cell-button" square type="primary" text="编辑" @click="edit(item)"/>
               <van-button class="swipe-cell-button" square type="danger" text="删除" @click="del" />
             </template>
           </van-swipe-cell>
@@ -99,6 +99,8 @@ export default {
               return 'color_red'
             case '2':
               return 'color_green'
+            case '3':
+              return 'color_green'
           }
         } else if (type === 'SCJG') { // 审查状态 0通过 1不通过
           switch (value) {
@@ -123,14 +125,16 @@ export default {
     },
     setStatus (type, value) {
       if (value) {
-        if (type === 'TJZT') { // 提交状态 0 已提交 1 未提交 2 已审
+        if (type === 'TJZT') { // 0 已提交 1 未提交 2 已审查 3已审批
           switch (value) {
             case '0':
               return '已提交'
             case '1':
               return '未提交'
             case '2':
-              return '已审'
+              return '已审查'
+            case '3':
+              return '已审批'
           }
         } else if (type === 'SCJG') { // 审查状态 0通过 1不通过
           switch (value) {
@@ -178,8 +182,17 @@ export default {
       }
     },
     onClickRight () {},
-    edit (id) {
-      this.$router.push({ name: 'events', params: { id: id } })
+    edit (row) {
+      if (row.TJZT === '1') {
+        this.$router.push({ name: 'events', params: { info: row } })
+      } else {
+        this.$notify({
+          message: '只能编辑未提交的活动'
+        })
+      }
+    },
+    add () {
+      this.$router.push({ name: 'events' })
     },
     del () {
       Dialog.confirm({

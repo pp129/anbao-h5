@@ -9,7 +9,7 @@
       <div class="content">
         <van-tabs @click="onClickTab" v-model="active">
           <van-tab v-for="(item,index) in tabs" :title="item.title" :name="item.name" :key="index">
-            <component :is="item.component" :ref="item.name"></component>
+            <component :is="item.component" :ref="item.name" :info="info"></component>
           </van-tab>
         </van-tabs>
       </div>
@@ -64,11 +64,12 @@ export default {
           title: '涉会车辆',
           component: () => import('@/components/events/cars')
         }
-      ]
+      ],
+      info: null
     }
   },
   mounted () {
-    console.log(this.$route.params)
+    this.info = this.$route.params.info
     this.setSubMenu(this.active)
   },
   methods: {
