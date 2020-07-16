@@ -184,7 +184,9 @@ export default {
     onClickRight () {},
     edit (row) {
       if (row.TJZT === '1') {
-        this.$router.push({ name: 'events', params: { info: row } })
+        this.$store.dispatch('updateInfo', row).then(() => {
+          this.$router.push({ name: 'events' })
+        })
       } else {
         this.$notify({
           message: '只能编辑未提交的活动'

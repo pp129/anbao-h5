@@ -201,7 +201,6 @@ export default {
       await this.getCode()
       await this.getVenue()
       await Object.assign(this.forms, this.info)
-      console.log(this.info)
       const HDLX = _.find(this.RWHDLX, { value: this.info.HDLX })
       if (HDLX) {
         this.type = HDLX.text
@@ -216,7 +215,6 @@ export default {
       const DTXDS = this.forms.DTXDS
       if (DTXDS) {
         const coors = JSON.parse(DTXDS)
-        console.log(coors)
         if (this.forms.POINTTYPE === 'dian') {
           this.DrawPoint(coors)
         } else if (this.forms.POINTTYPE === 'xian') {
@@ -233,7 +231,7 @@ export default {
       // 状态图标-默认在线图标
       const icon = enableIcon
       const marker = new WMap.Marker({
-        position: coors, // 标注位置
+        position: coors[0], // 标注位置
         icon: icon // 标注图标,默认半径为 5 像素的蓝色圆圈
       })
       // 将创建的点标记添加到已创建的矢量图层：

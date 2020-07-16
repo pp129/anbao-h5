@@ -14,5 +14,6 @@ export default {
   permission_routers: state => state.permission.routers,
   permissionList: state => state.user.permissionList,
   addRouters: state => state.permission.addRouters,
-  getMap: state => state.map // 获取地图
+  getMap: state => state.map, // 获取地图
+  getInfo: state => state.user.info
 }

@@ -68,8 +68,13 @@ export default {
       info: null
     }
   },
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      vm.active = from.meta.from
+    })
+  },
   mounted () {
-    this.info = this.$route.params.info
+    this.info = this.$store.getters.getInfo
     this.setSubMenu(this.active)
   },
   methods: {
@@ -80,14 +85,12 @@ export default {
       this.setSubMenu(name)
     },
     onSelect (data) {
-      console.log(data)
       this.showActions = false
       this.$nextTick(() => {
         this.$refs[data.comp][0][data.fn]()
       })
     },
     setSubMenu (name) {
-      console.log(name)
       let menus = []
       let showMenu = false
       switch (name) {

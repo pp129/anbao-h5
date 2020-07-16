@@ -16,11 +16,14 @@ const user = {
     roles: [],
     app: {},
     usedCasServer: '',
-    permissionList: []
-
+    permissionList: [],
+    info: null
   },
 
   mutations: {
+    SET_INFO: (state, info) => {
+      state.info = info
+    },
     SET_TOKEN: (state, token) => {
       state.token = token
     },
@@ -95,7 +98,9 @@ const user = {
     ChangeLayout ({ commit }, layoutvalue) {
       commit('SET_LAYOUTTYPE', layoutvalue)
     },
-
+    updateInfo ({ commit }, info) {
+      commit('SET_INFO', info)
+    },
     // 获取用户信息以及加载平台管理路由
     GetInfo ({ commit, state }) {
       commit('SET_LAYOUTTYPE', '2')
